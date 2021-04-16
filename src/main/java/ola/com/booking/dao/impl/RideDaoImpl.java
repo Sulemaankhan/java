@@ -17,13 +17,14 @@ public class RideDaoImpl implements RideDao {
 	@Override
 	public void booked(Ride ride) {
 		try {
-
+			System.out.println("userId" + ride.getUserId());
+			System.out.println("RouteId" + ride.getRouteId());
 			PreparedStatement stmt = conn
-					.prepareStatement("insert into Ride (RideId, UserId, RouteId, datetime) values (?,?,?,?)");
-			stmt.setInt(1, ride.getRideId());
-			stmt.setInt(2, ride.getUserId());
-			stmt.setInt(3, ride.getRouteId());
-			stmt.setString(4, ride.getDateTime());
+					.prepareStatement("insert into Ride (userId, routeId, dateTimes) values (?,?,?)");
+			// stmt.setInt(1, ride.getRideId());
+			stmt.setInt(1, ride.getUserId());
+			stmt.setInt(2, ride.getRouteId());
+			stmt.setDate(3, ride.getDateTime());
 
 			stmt.execute();
 		} catch (SQLException e) {
@@ -41,10 +42,11 @@ public class RideDaoImpl implements RideDao {
 			ResultSet result = conn.createStatement().executeQuery("select * from ride");
 			while (result.next()) {
 				Ride ride = new Ride();
+
 				ride.setRideId(result.getInt("rideId"));
 				ride.setUserId(result.getInt("userId"));
 				ride.setRouteId(result.getInt("routeId"));
-				ride.setDateTime(result.getString("datetime"));
+				ride.setDateTime(result.getDate("dateTimes"));
 				rideList.add(ride);
 			}
 			return rideList;

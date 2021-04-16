@@ -4,6 +4,7 @@ import ola.com.booking.dao.UserDao;
 import ola.com.booking.dao.impl.UserDaoImpl;
 import ola.com.booking.helper.UserHelper;
 import ola.com.booking.model.User;
+import ola.com.booking.model.UserDTO;
 import ola.com.booking.service.UserService;
 
 public class UserServiceImpl implements UserService{
@@ -18,7 +19,14 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public boolean validateUser(String username, String password) {
-		return userDao.validateUser(username, password);
+	public UserDTO validateUser(String username, String password) {
+		UserDTO udto=new UserDTO();
+		User user=userDao.validateUser(username, password);
+		
+		//fatching detaild from db
+		udto.setName(user.getName());
+		udto.setPassword(user.getPassword());
+		udto.setId(user.getuserId());
+		return udto;
 	}
 }

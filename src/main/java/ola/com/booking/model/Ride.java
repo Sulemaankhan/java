@@ -1,15 +1,14 @@
 package ola.com.booking.model;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 public class Ride {
 
-
 	private int rideId;
 	private int userId;
 	private int routeId;
-	String  dateTime;
-	
+	Date dateTime;
 	public int getRideId() {
 		return rideId;
 	}
@@ -28,11 +27,13 @@ public class Ride {
 	public void setRouteId(int routeId) {
 		this.routeId = routeId;
 	}
-	public String getDateTime() {
+	public Date getDateTime() {
 		return dateTime;
 	}
-	public void setDateTime(String dateTime) {
+	public void setDateTime(Date dateTime) {
 		this.dateTime = dateTime;
 	}
+
+	
 	
 }

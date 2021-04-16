@@ -29,5 +29,6 @@
 		<input type = "hidden" name="action" value="register"/>
 		<input type="submit" value="Register" />
 	</form>
+	
 </body>
 </html>

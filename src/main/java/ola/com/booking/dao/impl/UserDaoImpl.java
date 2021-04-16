@@ -18,12 +18,12 @@ public class UserDaoImpl implements UserDao {
 		System.out.println("" + user.getuserId());
 		try {
 			PreparedStatement stmt = conn
-					.prepareStatement("insert into User_r (userId, email, name, password, phoneNo) values (?,?,?,?,?)");
-			stmt.setInt(1, user.getuserId());
-			stmt.setString(2, user.getEmail());
-			stmt.setString(3, user.getName());
-			stmt.setString(4, user.getPassword());
-			stmt.setString(5, user.getPhoneNo());
+					.prepareStatement("insert into User_r (email, name, password, phoneNo) values (?,?,?,?)");
+			// stmt.setInt(1, user.getuserId());
+			stmt.setString(1, user.getEmail());
+			stmt.setString(2, user.getName());
+			stmt.setString(3, user.getPassword());
+			stmt.setString(4, user.getPhoneNo());
 
 			stmt.execute();
 		} catch (SQLException e) {
@@ -33,19 +33,24 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public boolean validateUser(String username, String password) {
+	public User validateUser(String username, String password) {
+		User u = new User();
 		try {
+			ResultSet rs = null;
 			PreparedStatement stmt = conn
-					.prepareStatement("SELECT EXISTS(SELECT * FROM User_r WHERE name=? and password=?)");
+					.prepareStatement("SELECT userId,name,password FROM User_r WHERE name=? and password=?");
 			stmt.setString(1, username);
 			stmt.setString(2, password);
-
-			return stmt.execute();
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				u.setId(rs.getInt("userId"));
+			}
+			return u;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
+		return u;
 	}
 
 }

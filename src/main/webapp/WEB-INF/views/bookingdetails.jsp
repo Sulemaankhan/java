@@ -8,6 +8,7 @@
 </head>
 <h1>Customer Booking Details</h1>
 <body>
+<p>Ride Successfully booked<p>
 	<table style="with: 80%">
 		<tr>
 			<td>RideId</td>
@@ -18,10 +19,10 @@
 
 		<c:forEach items="${rideList}" var="ride">
 			<tr>
-				<td>${ride.RideId}</td>
-				<td>${ride.UserId}</td>
-				<td>${ride.RouteId}</td>
-				<td>${ride.datetime}</td>
+				<td>${ride.rideId}</td>
+				<td>${ride.userId}</td>
+				<td>${ride.routeId}</td>
+				<td>${ride.dateTime}</td>
 			</tr>
 		</c:forEach>
 	</table>
