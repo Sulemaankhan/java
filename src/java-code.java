@@ -1,21 +1,194 @@
 Logical
 -------
-	ArrayAndString:
-		//reverse string
-		//reverse sentance
-		//sort string
-		//remove dup from the string
-		//seq of char
-		//first non rep seq
-		//binary search
-		//lenior search
-		//number palindrom
-		//sub arr based on target
-		//two max sum no
-		//move zero to right
-		//Find the number from the string and sum
-		//given array sum of even number
-		//n sorted list merge to one sorted list 
+
+//reverse string
+=================	
+	return IntStream.range(0, str.length())
+				.mapToObj(i->str.charAt(str.length()-1-i))
+				.map(String::valueOf)
+				.collect(Collectors.joining());	
+//reverse sentance
+==================
+		String[] strArr = str.split(" "); // split on single space
+		StringBuilder result = new StringBuilder();
+		for (int i = strArr.length - 1; i >= 0; i--) {
+			result.append(strArr[i]);
+			if (i != 0) {
+				result.append(" "); //
+			}
+			// add space
+		}
+		System.out.println("Input: " + str);
+		return result.toString();
+		
+		java8:
+		Stream.of(str.split(" ")).reduce((a,b)-> b+ " "+a).orElse("");
+			
+//sort string
+=============
+	Stream.of(str.split("")).sorted()..collect(Collectors.joining());
+	sort.chars()
+        .sorted().mapToObj(c->String.valueOf((char)c)).collect(Collectors.joining())
+		
+	Sort Words given List:
+	----------------------
+	List<String> sstList=Arrays.asList("bpple","Zadt","aqwrt");
+        System.out.println(sstList.stream()
+        		.map(s->s.toLowerCase()).
+        		sorted().collect(Collectors.toList()));
+	
+
+//remove dup from the string
+==============================
+		Stream.of(str.split("")) //convert str to Stream(String) //['a','f','y'] etc.
+				 .distinct()  //return distinct uniques
+				 .map(Object::toString) //map convert unique char to string
+				 .collect(Collectors.joining()); //join one by one
+				 
+		str.chars().
+				mapToObj(c->String.valueOf((char)c))
+				.distinct()
+				.collect(Collectors.joining());
+		
+		str=str.toLowerCase();
+		char [] ch=str.toArray();
+		String result="";
+		for(int i; i<ch.length;i++){
+			if(ch[i]!=' '){
+				for(int j=i+1; j<ch.length;i++){
+					if(ch[i]==ch[j]){
+						ch[j]=' ';
+					}
+				}
+				if(ch[i]!=' '){
+					result+=ch[i];
+				}
+			}
+		}
+	
+//first non rep seq
+======================
+	claas A{
+	for (char c : s.toCharArray()) {
+			if (s.indexOf(c) == s.lastIndexOf(c)) {
+				return c;
+			}
+		}
+		throw new RuntimeException("Envalid............");
+	}	
+	String result1=Stream.of(s.split("")) //split every possition ->//["S","u","l","e"];
+		.collect(Collectors.groupingBy(Function.identity(),LinkedHashMap::new,Collectors.counting()))
+		.entrySet().stream().filter(value->value.getValue()==1)
+		.map(Map.Entry::getKey) //mapped with key only
+		.findFirst().orElse(null); //find first key. return as string
+
+	// time complexity o(n)
+		//space complexity o(n)
+		//work for nay set or unicode
+		Map<Character, Integer> map=new HashMap<>();
+		str = str.replaceAll("[^A-Za-z0-9]", "");
+		for (char c : str.toCharArray()) {
+			map.put(c, map.getOrDefault(c,0)+1); //freq of char
+			
+			//map.getOrDefault(c,0)
+			//if c already in map,take current value
+			//if not take 0
+			//add +1
+			//map.put(c,value)
+			//put it back map
+		}
+		for(char c:str.toCharArray()) {
+			if(map.get(c)==1) { // k=c, val=1
+				return c;
+			}
+		}
+
+		throw new RuntimeException("Envalid............");
+	}
+
+//Display consicutive sequence of earch char:
+==========================================
+		input=input.toLowerCase();
+		Map<Character, Integer> map = new HashMap<>();
+		for (int i = 0; i < str.length(); i++) {
+			if (!map.containsKey(str.charAt(i))) {
+				map.put(str.charAt(i), 1);
+			} else {
+				Integer val=map.get(str.charAt(i)); //count duplicate.
+				map.put(str.charAt(i), val + 1);
+			}
+		}
+		Using java8:
+		-----------
+		Map<String, Long> output = Stream.of(str.split("")).map(s -> s.toLowerCase())
+				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+		
+		System.out.println("7. CountSequenceOfChar ::Output using java8 : " + output);
+		
+		fasted:
+		-----
+		int[] arr=new int[256]; //index rande 0 to 255
+		all element initialzied 0 by default
+		
+		for(char c:s.toCharArray()){
+			arr[c]++;
+		}
+	
+//sub arr based on target
+=========================	
+	static void creatSumArrTrg(int[] arrs, int target) {
+
+		HashSet<Integer> set = new HashSet<>();
+		String result = "";
+		for (int num : arrs) {
+
+			int temp = target - num;  //target always>=num
+			if (set.contains(temp)) { //if set==temp go inside the cond else 
+				//add to set
+				result = "pair is:" + num + "," + temp + "=" + target;
+				System.out.println(result);
+				return;
+			}
+			set.add(num);
+		}
+
+	}
+
+//two max sum no
+===================
+	private static int sumofTwoLargesNumber(int[] arr) {
+		int max1 = Integer.MIN_VALUE;
+		int max2 = Integer.MIN_VALUE;
+		//flow
+		//max1->max2
+		//num->max1
+		//num->max2
+		for (int num : arr) {
+			if (num > max1) { //num always >max1 and max2 
+				max2 = max1; 
+				max1 = num; //assign num max1
+			} else if (num > max2) {
+				max2 = num;
+			}
+		}
+		return max1 + max2;
+		
+	}
+
+//move zero to right
+======================
+	int j=0;
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] != 0) {
+				int temp = arr[i]; //using swap
+				arr[i] = arr[j];
+				arr[j] = temp;
+				j++;
+			}
+		}
+		return arr;
+	
+//n sorted list merge to one sorted list 
 		
 	LeetCode:
 	=========
@@ -43,11 +216,8 @@ Logical
     }
 }
 		
-	Unique String(remove duplicate from given string)
-	---------------
-	
-		Diff ways dec:
-		-----------------
+Diff ways dec:
+-----------------
 			String str="jhfhjjhgf";
 			//Stream<String> s=Stream.of(str);
 			//Stream<String> ss=Stream.of(str.split(""));
@@ -56,54 +226,10 @@ Logical
 			//Arrays.stream() only application for ,non string array all type wrapper
 				Ex:
 				Integer[] arr= {4,3,4};
-				Stream<Integer> sss=Arrays.stream(arr);
-		
-		Remove dupicates
-		-----------------
-		Stream.of(str.split("")) //convert str to Stream(String) //['a','f','y'] etc.
-				 .distinct()  //return distinct uniques
-				 .map(Object::toString) //map convert unique char to string
-				 .collect(Collectors.joining()); //join one by one
-				 
-		str.chars().
-				mapToObj(c->String.valueOf((char)c))
-				.distinct()
-				.collect(Collectors.joining());
-		
-		str=str.toLowerCase();
-		char [] ch=str.toArray();
-		String result="";
-		for(int i; i<ch.length;i++){
-			if(ch[i]!=' '){
-				for(int j=i+1; j<ch.length;i++){
-					if(ch[i]==ch[j]){
-						ch[j]=' ';
-					}
-				}
-				if(ch[i]!=' '){
-					result+=ch[i];
-				}
-			}
-		}
-		
-		
-	List<List<Integer>> to list using flatMap:
-	System.out.println("=====");
-		List<List<Integer>> list=List.of(List.of(2,4,6,3), List.of(23,14,65,2),List.of(20,47,67,53));
-		List<Integer> result=list.stream().flatMap(Collection::stream).
-		sorted().distinct()
-		.collect(Collectors.toList());	
-		
-	Reverse the string:
-	-------------------
-	return IntStream.range(0, str.length())
-				.mapToObj(i->str.charAt(str.length()-1-i))
-				.map(String::valueOf)
-				.collect(Collectors.joining())
+				Stream<Integer> sss=Arrays.stream(arr);			
 				
-				
-	Find the number from the string and sum:
-	---------------------------------------
+Find the number from the string and sum:
+=======================================
 	//First approch
 		int sumTot = str.chars(). //convert string to stream
 				filter(Character::isDigit) //filter digit from charector
@@ -119,8 +245,8 @@ Logical
 		}
 		
 		
-	Largest number.
-	-----------------
+Largest number.
+==============
 		Integer[] arr= {4,3,4};
 		Stream<Integer> sss=Arrays.stream(arr);
 		//Stream<Integer> in=Stream.of(2,4,6,6,5);
@@ -128,121 +254,73 @@ Logical
 		System.out.println(in.max(Comparator.comparing(Integer::intValue)).get());
 		
 		
-	Sum of even number:
-	------------------
+Sum of even number:
+===================	
 	int[] arr = { 3, 4, 6, 13, 8 };
 		long ss = Arrays.stream(arr). // IntStream
 				filter(q -> q % 2 == 0).mapToLong(q -> q).sum();
 	Stream<Integer> st = Stream.of(2, 4, 3, 7, 8);
 		int sumOfEvenNum = st.filter(s -> s % 2 == 0).mapToInt(i -> i).sum();
 		
-	
-	Display consicutive sequence of earch char:
-	------------------------------
-		input=input.toLowerCase();
-		Map<Character, Integer> map = new HashMap<>();
-		for (int i = 0; i < str.length(); i++) {
-			if (!map.containsKey(str.charAt(i))) {
-				map.put(str.charAt(i), 1);
+//binary search
+===================
+	int left = 0;
+		int right = arr.length - 1;
+
+		while (left <= right) {
+			// find mid num
+			int mid = left + (right - left) / 2;
+
+			if (arr[mid] == target) {
+				return mid;
+			} else if (arr[mid] < target) { 
+				left = mid + 1; //left to right
 			} else {
-				Integer val=map.get(str.charAt(i)); //count duplicate.
-				map.put(str.charAt(i), val + 1);
+				right = mid - 1; //move right to left
 			}
+		} 
+		return -1;
+	}
+
+//lenior search
+//number palindrom	
+=================
+	int  reverse = 0;
+		boolean check=false;
+		int number = 454;// It is the number variable to be checked for palindrome
+
+		int temp = number;
+		while (number > 0) {
+			int rem = number % 10; // getting remainder
+			reverse = reverse * 10 + rem;
+			number = number / 10; // quicent
 		}
-		Using java8:
-		-----------
-		Map<String, Long> output = Stream.of(str.split("")).map(s -> s.toLowerCase())
-				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-		
-		System.out.println("7. CountSequenceOfChar ::Output using java8 : " + output);
-		
-		fasted:
-		int[] arr=new int[256]; //index rande 0 to 255
-		all element initialzied 0 by default
-		
-		for(char c:s.toCharArray()){
-			arr[c]++;
+		if (temp == reverse) {
+			check=true;
 		}
-		
-		
-	Sort char given String using java8
-	-----------------------------------
-	
-	Stream.of(str.split("")).sorted().map(Object::toString).collect(Collectors.joining());
-	sort.chars()
-        .sorted().mapToObj(c->String.valueOf((char)c)).collect(Collectors.joining())
-		
-	Sort Words given List:
-	----------------------
-	List<String> sstList=Arrays.asList("bpple","Zadt","aqwrt");
-        System.out.println(sstList.stream()
-        		.map(s->s.toLowerCase()).
-        		sorted().collect(Collectors.toList()));
-	
-	Custom sorting
-	---------------	
+		return check;
+
+				
+Custom sorting
+=============
 	employees.stream().
 		sorted(Comparator.comparing(Employee::getAge))
 			.collect(Collectors.toList());	
-						
-	Reverse the words not char:
-	--------------------------
-		String[] strArr = str.split(" "); // split on single space
-		StringBuilder result = new StringBuilder();
-		for (int i = strArr.length - 1; i >= 0; i--) {
-			result.append(strArr[i]);
-			if (i != 0) {
-				result.append(" "); //
-			}
-			// add space
-		}
-		System.out.println("Input: " + str);
-
-		return result.toString();
-		
-		java8:
-		Stream.of(str.split(" ")).reduce((a,b)-> b+ " "+a).orElse("");
-		
-		
-	First non repeated char:
-	======================
-	claas A{
-	for (char c : s.toCharArray()) {
-			if (s.indexOf(c) == s.lastIndexOf(c)) {
-				return c;
-			}
-		}
-		throw new RuntimeException("Envalid............");
-	}	
-	String result1=Stream.of(s.split("")) //split every possition ->//["S","u","l","e"];
-		.collect(Collectors.groupingBy(Function.identity(),LinkedHashMap::new,Collectors.counting()))
-		.entrySet().stream().filter(value->value.getValue()==1)
-		.map(Map.Entry::getKey) //mapped with key only
-		.findFirst().orElse(null); //find first key. return as string
-		
-	//using simple approch but fasted
-		int[] arr=new int[256]; //index rande 0 to 255
-		all element initialzied 0 by default
-		
-		
-		//count frequency
-		for (int i = 0; i < s.length(); i++) {
-			arr[s.charAt(i)]++;
-		}
-		//find non repeated.
-		for (int i = 0; i < s.length(); i++) {
-			if(arr[s.charAt(i)]==1) {
-				return s.charAt(i);
-			}
-		}
-		return '\0';   //return as char. 	
-		
-		
+FlatMap
+=======	
+	List<List<Integer>> to list using flatMap:
+	System.out.println("=====");
+		List<List<Integer>> list=List.of(List.of(2,4,6,3), List.of(23,14,65,2),List.of(20,47,67,53));
+		List<Integer> result=list.stream().flatMap(Collection::stream).
+		sorted().distinct()
+		.collect(Collectors.toList());	
+								
 	LRU cache:
 	==========
 	
 	Longest String without repeating a charector
 	===========================================
+	
 	using sliding window.
 		
 	//thread safe counter:
