@@ -187,7 +187,22 @@ Logical
 			}
 		}
 		return arr;
-	
+	fast approach:
+	------------
+		int index=0; //0(n)
+		//move non zer elements forword.
+		for(int num:arr) {
+			if(num!=0) {
+				arr[index++]=num; 
+			}
+		}
+		//fill remaining positions with zero
+		//add number of zero based on the index count
+		while(index<arr.length) {
+			arr[index++]=0;
+		}
+		return arr;
+
 //n sorted list merge to one sorted list 
 		
 	LeetCode:
