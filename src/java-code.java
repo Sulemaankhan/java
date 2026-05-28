@@ -414,3 +414,93 @@ FlatMap
 			
 			boolean nameNoneMatch=list.stream().noneMatch(name->name.getEname().equalsIgnoreCase("dsjg"));
 			System.out.println("\n Employee none match :\n"+nameNoneMatch);
+
+@SpringBootApplication:
+==========================
+		
+			 		  	
+		
+Execution flow
+----------------
+	-When execute the main method
+		it called SpringApplication.run();
+			
+	-run() read the configuration from the main class,
+			identify the there key components due to @SpringBootApplication.
+	-Components scanning finds all custom classes(controller,servic etc.) and register them as beans.
+		-Auto-Configure inspects your project depdencies and automatically set required infrastructure 
+			beans(database,pools,webserver,logging.)
+	
+
+	@Configuration:
+			-This ann tags/marks the class as a source of bean defination.
+			-It tells to spring container class contains one or more @bean methods,and spring should process it
+				to generate bean definations and service req for those beans at run time.		
+				
+		@ComponentScan:
+			-Discovers custom components(controllers,service and repo) in the relevent pack.
+			-This ann enables automatic components dedection.
+			-linking configuration.	
+			-By default it tells Spring to scan the current pack, of the annotated class and all its sub-packages 
+				for spring components.
+			-It finds and registers classes annotated with stereotype anno like: @Servce, @Controller as spring beans in 
+				application context.
+
+		@EnableAutoConfiguration:
+			-Auto configuration process based on classpath dependencies.
+			-This is core of spring boot, it tells to spring boot to start configuring the app automatically based on the
+				depdencies jars present on the classPath.
+			
+			-For ex: If you have the spring-web dependecny, it automatically configures and embeds a tomcat or jetty server,
+					to setup the dispacher servlet.
+				if have jpa dependency, it auto configures a data source and other necessary components.
+			-it works by looking up auto-configuration cantidates list in Meta-INF/spring file within various.
+		
+		-All these beans are assembled into the ApplicationContext and application ready to run.
+
+flow:
+	Application Start.
+		-@EnableAutoConfiguration.
+				-Load auto config classes.
+					-create beans if condetions match. 	
+		
+How auto configuration work:
+============================
+-based on the classPath,exsiting beans and application properties to configure spring beans.		
+		
+	@SpringBootAnnotation:
+		-Combination of three anno
+			1-@Configuration
+			2-@EnableAutoConfiguration
+			3-@ComponentScan
+			
+	@EnableAutoConfiguration:
+		-Tell to spring boot enable auto config
+		-internally import ->AutoConfigurationImportSelector
+			
+	AutoConfigurationImportSelector:
+		-scan class path.
+		-load auto config classes from
+			-Meta-INF/spring/org.sf.boot.autoconfigure.AutoConfiguration.import
+			
+	Auto config classes activated based on the condetion.
+		@CondetinalOnClass -Class exist on classPath
+		@CondetionalOnBeans -bean already exist
+		@CondetionalOnProperty -Property present/enabled
+		@CondetionalOnWebapplication -webapp
+		@CondetionsOnMissingBean anno -Beans not ready to defined
+			
+	Ex: Data Source Auto-Configuration
+		-spring jdbc on class-path
+		-database property exist
+		-no custom datasource bean defined.
+		-spring boot auto-create DataSource.
+
+		@CondetionalonClass(DataSource.class)
+		@CondetionsOnMissingBean(DataSource.class)
+		class DataSourceAutoConfiguration{}
+			
+		these values are injected automatically
+			-ds.url
+			-uname
+			-password
