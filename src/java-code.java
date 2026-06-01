@@ -35,8 +35,7 @@ Logical
 	List<String> sstList=Arrays.asList("bpple","Zadt","aqwrt");
         System.out.println(sstList.stream()
         		.map(s->s.toLowerCase()).
-        		sorted().collect(Collectors.toList()));
-	
+        		sorted().collect(Collectors.toList()));	
 
 //remove dup from the string
 ==============================
@@ -65,6 +64,14 @@ Logical
 				}
 			}
 		}
+//Given String saparated number by , and Ex: John-ece
+String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
+		Stream.of(str.split(";"))
+				.map(s->s.split(":"))
+				//.forEach(arr->System.out.println(arr[0]+","+arr[1]+"-"+ arr[2]));
+				.map(arr->arr[0]+","+arr[1]+"-"+ arr[2])
+				.collect(Collectors.toList()).forEach(System.out::println);
+		
 	
 //first non rep seq
 ======================
