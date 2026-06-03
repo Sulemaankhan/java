@@ -511,3 +511,80 @@ How auto configuration work:
 			-ds.url
 			-uname
 			-password
+
+//Solid Princple
+=================
+		Single Responsibility Principle  -
+		---------------------------------
+			Every class must have a single,responsibility.
+			Keep classes small and focused.
+			Ex: Userservcie should not have email send logic, Create new EmailService and write email send logic.
+		
+		Open/Closed Principle   -
+		--------------------	
+			Capabable to add new behaviour without changing existing code.
+			Software/Classes should be open for extension but closed for modification.
+			Ex:Strategy design pattern;Add new payment method(UPI,Card,Wallet) and corrier servcie like-bluedart,fedex.
+			
+		Liskov Substitution Principle  -
+		----------------------------	
+			Child classes should be usable in place of parent classes,without breaking behavior.
+			Avoid overriding parent method incorrectly.
+			Ex:Bird has fly fun, but Penguim subclass not extend Bird since it cannot fly.
+			1) Code Reusability
+			2) Easier Maintenance
+			3) Reduced Coupling
+			
+		Interface Segregation Principle  -
+		--------------------------------	
+			Do not force a class to implement unnecessary methods.
+			Create small specific interface.
+			
+		Dependency Inversion Principle -
+		--------------------------------	
+			(high-level modules should not depend on low-level modules. 
+			Depend on the abstraction not concreate implementation.
+
+//Strategy Design pattren(OCP):-
+==============================
+	waht?
+		A strategy pattern in java is a behavioral design pattern , behavior of an object to be selected at runtime. 
+	How
+	----
+		*prefer compossion (has-a) relation over inheritance
+		*always code with the interface never with implement with class.	
+		*code should we open with extention and must be close for modification.
+				
+		Note:-
+			if we implement stragy design pattern without using spring,we need to implement factory-design pattern manually
+			where we need to create both main and dependent class obj and dependent obj inject to main obj.
+					
+			if we implement stragy design pattern using spring IOC container it self access factory-design-patren,
+			so instantaion and injection taken care by IOC.		
+	Features:
+		Flexibility and Reusability:
+		Separation of Concerns:
+		Open for Extension and close for modification
+		Loosely coupled	
+			
+//Fectory design pattern:
+=======================
+	What?
+		Uesed to create the object without exposing obj creation logic to client.
+	Why?
+		avoid repeated object creation code.
+		make the system flexible and lossly coupled.
+		easly add object without modify client code.
+
+	Advantages:
+		-Certralized obj creation.
+		-Loosely coupled.
+		-Reduced if else in client.
+		-Easy to test and maintain.
+				
+	Factory pattern in spring boot
+		-BeanFacotry
+		-ApplicationContext			
+		
+	Ex:
+		Design for Report System
