@@ -588,3 +588,23 @@ How auto configuration work:
 		
 	Ex:
 		Design for Report System
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	-----		
