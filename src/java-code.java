@@ -104,6 +104,26 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 			//map.put(c,value)
 			//put it back map
 		}
+
+//Best approch
+================
+	//but Brute force
+		//only ASCII charector
+		int[] arr = new int[256];
+
+		// count frequency
+		for (char c:s.toCharArray()) {
+			arr[c]++;
+		}
+		// find non repeated.
+		for (char c:s.toCharArray()) {
+			if (arr[c] == 1) {
+				return c;
+			}
+		}
+
+//short approch
+===============
 		for(char c:str.toCharArray()) {
 			if(map.get(c)==1) { // k=c, val=1
 				return c;
