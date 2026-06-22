@@ -37,6 +37,31 @@ Logical
         		.map(s->s.toLowerCase()).
         		sorted().collect(Collectors.toList()));	
 
+Longest String sentance
+------------------------
+	private static String longestString(String string) {
+		return Stream.of(string.split(",")).max(Comparator.comparing(String::length))
+		.map(String::toString).orElse("Not");
+		//return null;
+	}
+	
+Longest Sub-String
+------------------
+	private static int longestSubstring(String str) {
+		HashMap<Character, Integer> map = new HashMap<>();
+		int left = 0;
+		int max = 0;
+		for (int right = 0; right < str.length(); right++) {
+			char ch = str.charAt(right);
+			if (map.containsKey(ch)) {
+				left = Math.max(left, map.get(ch) + 1);
+			}
+			map.put(ch, right);
+			max = Math.max(max, (right - left) + 1);
+		}
+		return max;
+	}
+
 //remove dup from the string
 ==============================
 		Stream.of(str.split("")) //convert str to Stream(String) //['a','f','y'] etc.
@@ -89,6 +114,7 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 		.map(Map.Entry::getKey) //mapped with key only
 		.findFirst().orElse(null); //find first key. return as string
 
+	//Best approch second
 	// time complexity o(n)
 		//space complexity o(n)
 		//work for nay set or unicode
@@ -105,7 +131,7 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 			//put it back map
 		}
 
-//Best approch
+//Best approch one
 ================
 	//but Brute force
 		//only ASCII charector
