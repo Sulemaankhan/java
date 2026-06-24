@@ -45,23 +45,24 @@ Longest String sentance
 		//return null;
 	}
 	
-Longest Sub-String
-------------------
+non repeated Longest Sub-String
+-------------------------------
 	private static int longestSubstring(String str) {
-		HashMap<Character, Integer> map = new HashMap<>();
-		int left = 0;
-		int max = 0;
-		for (int right = 0; right < str.length(); right++) {
-			char ch = str.charAt(right);
-			if (map.containsKey(ch)) {
-				left = Math.max(left, map.get(ch) + 1);
-			}
-			map.put(ch, right);
-			max = Math.max(max, (right - left) + 1);
-		}
-		return max;
+	    if (str == null || str.length() == 0) return 0;
+	    HashMap<Character, Integer> map = new HashMap<>();
+	    int left = 0;
+	    int max = 0;
+	    for (int right = 0; right < str.length(); right++) {
+	        char ch = str.charAt(right);
+	        // If the character is already in the map and within our current window
+	        if (map.containsKey(ch) && map.get(ch) >= left) {
+	            left = map.get(ch) + 1;
+	        }   
+	        max = Math.max(max, right - left + 1);
+	        map.put(ch, right); // Update or insert the character's latest index
+	    } 
+	    return max;
 	}
-
 //remove dup from the string
 ==============================
 		Stream.of(str.split("")) //convert str to Stream(String) //['a','f','y'] etc.
