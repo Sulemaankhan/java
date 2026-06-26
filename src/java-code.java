@@ -257,6 +257,24 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 		}
 		return arr;
 
+
+//Freq num based on K
+==================	
+private static void topReqKNum(int[] arr) {
+		
+		Map<Integer, Integer> map=new HashMap<>();
+		int k=2;
+		for(int num:arr) {
+			map.put(num,map.getOrDefault(num, 1)+1);
+		}
+		
+		 map.entrySet().stream().sorted((a,b)->a.getValue()-b.getValue())
+		.limit(k)
+		.forEach(s->System.out.println("Freq Nu based on K:"+s.getKey()));
+		//.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+		
+	}
+
 //n sorted list merge to one sorted list 
 		
 	LeetCode:
