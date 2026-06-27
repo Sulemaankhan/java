@@ -623,6 +623,18 @@ ProducerConsumerDemo:
 		producer.start();
 		consumer.start();
 
+	//How it works
+	-------------
+		Producer adds data into the queue using put().
+		Consumer removes data using take().
+		If the queue is full, put() blocks until space is available.
+		If the queue is empty, take() blocks until an item is produced.
+	Real-world example
+	-----------------	
+		Producer: Order service generating orders.
+		Consumer: Payment service processing orders.
+		Queue: Message queue like Kafka or RabbitMQ.
+
 @SpringBootApplication:
 ==========================
 		
