@@ -1,6 +1,5 @@
 Logical
 -------
-
 //reverse string
 =================	
 	return IntStream.range(0, str.length())
@@ -26,7 +25,7 @@ Logical
 			
 //sort string
 =============
-	Stream.of(str.split("")).sorted()..collect(Collectors.joining());
+	Stream.of(str.split("")).sorted().collect(Collectors.joining());
 	sort.chars()
         .sorted().mapToObj(c->String.valueOf((char)c)).collect(Collectors.joining())
 		
@@ -63,13 +62,22 @@ non repeated Longest Sub-String
 	    } 
 	    return max;
 	}
+
+Print the duplicate
+====================	
+private static Set<String> founDuplicateChar(String string) {
+		// TODO Auto-generated method stub
+		Set<String> set=new HashSet<>();
+		return Stream.of(string.split(""))
+				.filter(d->!set.add(d))
+				.collect(Collectors.toSet());
+	}
 //remove dup from the string
 ==============================
 		Stream.of(str.split("")) //convert str to Stream(String) //['a','f','y'] etc.
 				 .distinct()  //return distinct uniques
-				 .map(Object::toString) //map convert unique char to string
-				 .collect(Collectors.joining()); //join one by one
-				 
+				// .map(Object::toString) //map convert unique char to string
+				 .collect(Collectors.joining()); //join one by one		 
 		str.chars().
 				mapToObj(c->String.valueOf((char)c))
 				.distinct()
@@ -131,7 +139,6 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 			//map.put(c,value)
 			//put it back map
 		}
-
 //Best approch one
 ================
 	//but Brute force
@@ -156,7 +163,6 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 				return c;
 			}
 		}
-
 		throw new RuntimeException("Envalid............");
 	}
 
@@ -176,14 +182,11 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 		-----------
 		Map<String, Long> output = Stream.of(str.split("")).map(s -> s.toLowerCase())
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-		
 		System.out.println("7. CountSequenceOfChar ::Output using java8 : " + output);
-		
 		fasted:
 		-----
 		int[] arr=new int[256]; //index rande 0 to 255
-		all element initialzied 0 by default
-		
+		all element initialzied 0 by default	
 		for(char c:s.toCharArray()){
 			arr[c]++;
 		}
@@ -191,11 +194,9 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 //sub arr based on target
 =========================	
 	static void creatSumArrTrg(int[] arrs, int target) {
-
 		HashSet<Integer> set = new HashSet<>();
 		String result = "";
 		for (int num : arrs) {
-
 			int temp = target - num;  //target always>=num
 			if (set.contains(temp)) { //if set==temp go inside the cond else 
 				//add to set
@@ -205,7 +206,6 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 			}
 			set.add(num);
 		}
-
 	}
 
 //two max sum no
@@ -225,8 +225,7 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 				max2 = num;
 			}
 		}
-		return max1 + max2;
-		
+		return max1 + max2;	
 	}
 
 //move zero to right
@@ -256,24 +255,103 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 			arr[index++]=0;
 		}
 		return arr;
-
-
+findTheDuplicateNum
+===================	
+private static Set<Integer> findTheDuplicateNum(int[] arr) {
+		Set<Integer> set=new HashSet<>();
+		List<Integer> list=Arrays.asList(2,5,7,3,2,3);
+		int firstDup=list.stream().filter(s->!set.add(s))
+				.findFirst().orElse(0);
+		System.out.println("first duplicate:"+firstDup);
+		Set<Integer> noOfDup=list.stream().filter(d->!set.add(d)).collect(Collectors.toSet());
+		return noOfDup;
+	}
+Second Highest num:
+===================
+private int secondMaxNum(int[] arrNum) {
+		List<Integer> list=Arrays.stream(arrNum)
+		.boxed().sorted().collect(Collectors.toList());
+		System.out.println("\nsorted arr using jdk8:\n"+list+"\n");
+		int max=Arrays.stream(arrNum)
+		.boxed().sorted(Comparator.reverseOrder())
+		.skip(1)
+		.findFirst().orElse(0);
+		return max;
+}	
 //Freq num based on K
 ==================	
-private static void topReqKNum(int[] arr) {
-		
+private static void topReqKNum(int[] arr) {	
 		Map<Integer, Integer> map=new HashMap<>();
 		int k=2;
 		for(int num:arr) {
 			map.put(num,map.getOrDefault(num, 1)+1);
-		}
-		
+		}		
 		 map.entrySet().stream().sorted((a,b)->a.getValue()-b.getValue())
 		.limit(k)
 		.forEach(s->System.out.println("Freq Nu based on K:"+s.getKey()));
-		//.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-		
+		//.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));		
 	}
+Find the number from the string and sum:
+=======================================
+	//First approch
+		int sumTot = str.chars(). //convert string to stream
+				filter(Character::isDigit) //filter digit from charector
+				.map(c -> c - '0') //convert char to number
+				.sum(); //sum all numbers		
+		//second approch
+		int sum=0;
+		for (char c : str.toCharArray()) {
+			if(Character.isDigit(c)) {
+				sum+=c-'0';
+			}
+		}		
+Largest number.
+==============
+		Integer[] arr= {4,3,4};
+		Stream<Integer> sss=Arrays.stream(arr);
+		//Stream<Integer> in=Stream.of(2,4,6,6,5);
+		//System.out.println(in.reduce(Integer.MIN_VALUE,Integer::max));
+		System.out.println(in.max(Comparator.comparing(Integer::intValue)).get());		
+Sum of even number:
+===================	
+	int[] arr = { 3, 4, 6, 13, 8 };
+		long ss = Arrays.stream(arr). // IntStream
+				filter(q -> q % 2 == 0).mapToLong(q -> q).sum();
+	Stream<Integer> st = Stream.of(2, 4, 3, 7, 8);
+		int sumOfEvenNum = st.filter(s -> s % 2 == 0).mapToInt(i -> i).sum();
+		
+//binary search
+===================
+	int left = 0;
+		int right = arr.length - 1;
+		while (left <= right) {
+			// find mid num
+			int mid = left + (right - left) / 2;
+			if (arr[mid] == target) {
+				return mid;
+			} else if (arr[mid] < target) { 
+				left = mid + 1; //left to right
+			} else {
+				right = mid - 1; //move right to left
+			}
+		} 
+		return -1;
+	}
+//number palindrom	
+=================
+	int  reverse = 0;
+		boolean check=false;
+		int number = 454;// It is the number variable to be checked for palindrome
+		int temp = number;
+		while (number > 0) {
+			int rem = number % 10; // getting remainder
+			reverse = reverse * 10 + rem;
+			number = number / 10; // quicent
+		}
+		if (temp == reverse) {
+			check=true;
+		}
+		return check;
 
 //n sorted list merge to one sorted list 
 		
@@ -315,78 +393,6 @@ Diff ways dec:
 				Integer[] arr= {4,3,4};
 				Stream<Integer> sss=Arrays.stream(arr);			
 				
-Find the number from the string and sum:
-=======================================
-	//First approch
-		int sumTot = str.chars(). //convert string to stream
-				filter(Character::isDigit) //filter digit from charector
-				.map(c -> c - '0') //convert char to number
-				.sum(); //sum all numbers
-		
-		//second approch
-		int sum=0;
-		for (char c : str.toCharArray()) {
-			if(Character.isDigit(c)) {
-				sum+=c-'0';
-			}
-		}
-		
-		
-Largest number.
-==============
-		Integer[] arr= {4,3,4};
-		Stream<Integer> sss=Arrays.stream(arr);
-		//Stream<Integer> in=Stream.of(2,4,6,6,5);
-		//System.out.println(in.reduce(Integer.MIN_VALUE,Integer::max));
-		System.out.println(in.max(Comparator.comparing(Integer::intValue)).get());
-		
-		
-Sum of even number:
-===================	
-	int[] arr = { 3, 4, 6, 13, 8 };
-		long ss = Arrays.stream(arr). // IntStream
-				filter(q -> q % 2 == 0).mapToLong(q -> q).sum();
-	Stream<Integer> st = Stream.of(2, 4, 3, 7, 8);
-		int sumOfEvenNum = st.filter(s -> s % 2 == 0).mapToInt(i -> i).sum();
-		
-//binary search
-===================
-	int left = 0;
-		int right = arr.length - 1;
-
-		while (left <= right) {
-			// find mid num
-			int mid = left + (right - left) / 2;
-
-			if (arr[mid] == target) {
-				return mid;
-			} else if (arr[mid] < target) { 
-				left = mid + 1; //left to right
-			} else {
-				right = mid - 1; //move right to left
-			}
-		} 
-		return -1;
-	}
-
-//lenior search
-//number palindrom	
-=================
-	int  reverse = 0;
-		boolean check=false;
-		int number = 454;// It is the number variable to be checked for palindrome
-
-		int temp = number;
-		while (number > 0) {
-			int rem = number % 10; // getting remainder
-			reverse = reverse * 10 + rem;
-			number = number / 10; // quicent
-		}
-		if (temp == reverse) {
-			check=true;
-		}
-		return check;
-
 				
 Custom sorting
 =============
@@ -404,9 +410,6 @@ FlatMap
 								
 	LRU cache:
 	==========
-	
-	Longest String without repeating a charector
-	===========================================
 	
 	using sliding window.
 		
@@ -462,8 +465,6 @@ FlatMap
 					.findFirst()
 					.orElse(null);
 			System.out.println("\nFind first emp with 4000 sal :\n"+findFirstEmp);
-			
-			
 			//find the min sal employee obj.
 			Employee micSal=list.stream().min(Comparator.comparing(Employee::getSalary)).orElse(null);
 			System.out.println("\nfind the min sal employee obj  :\n"+micSal);
@@ -486,6 +487,141 @@ FlatMap
 			
 			boolean nameNoneMatch=list.stream().noneMatch(name->name.getEname().equalsIgnoreCase("dsjg"));
 			System.out.println("\n Employee none match :\n"+nameNoneMatch);
+Multithreading:
+===============
+	How many ways to create a thread?
+	--------------------------------
+		1. Using class extend with Thread
+		--------------------------------
+		class MyThread extends Thread{
+			public void run(){
+				sop("fkjgjk")
+			}
+		}
+		TestClass{
+				MyThread mt=new MyThread();
+				mt.start() 
+			}	
+		}
+		Using lemada:
+			new Thread(()->{
+				sysop("");
+			}).start();
+		2. Using class implement with Runnable interface
+		---------------------------------------------
+		class MyTask implement Runnable{
+			public void run(){
+				sop("")
+			}
+		}
+		TestClass{
+			MyTask m=new MyTask();
+			Thread t=new Thread(m);
+			t.start();
+		}
+		Using lemda
+		Runnable r=()->{
+			sop(sjjjj);
+		}
+		new Thread(r).start();
+		3. Using Callable with FutureTask
+		--------------------------------
+		Callable<Integer> cal=()->100;
+			FutureTask<Integer> ft=new FutureTask<Integer>(cal);
+			new Thread(ft).start();
+			try {
+				System.out.println("Thread :"+ft.get());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+		4. Callable with call()
+		-----------------------
+			Callable<Integer> task=()->{
+				return 10+20;
+			}
+			Integer in=task.call();
+			sop(in);
+		5. Callable with ExecuterServcie
+		--------------------------------
+			//callable
+			Callable<Integer> cal=()->100;
+			//single thread executor
+			ExecutorService ex=Executors.newSingleThreadExecutor();
+			
+			//future call and submit
+			Future<Integer> future=ex.submit(cal);
+			try {
+				System.out.println(future.get());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+ThreadPool:
+============
+		ExecutorService ex = Executors.newFixedThreadPool(3);
+		ex.submit(() -> {
+			checkBalance();
+			try {
+				Thread.sleep(2000);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+		ex.submit(()->transferMony());
+		ex.shutdown();
+ProducerConsumer:
+=================
+	Producer:
+	--------
+	class Producer implements Runnable {
+		private BlockingQueue<Integer> queue;
+		public Producer(BlockingQueue<Integer> queue) {
+			this.queue = queue;
+		}
+		@Override
+		public void run() {
+			try {
+				for (int i = 1; i <= 5; i++) {
+					queue.put(i);
+					System.out.println("Produced: " + i);
+					Thread.sleep(1000);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+Consumer:
+--------
+	import java.util.concurrent.BlockingQueue;
+	class Consumer implements Runnable {
+		private BlockingQueue<Integer> queue;
+		public Consumer(BlockingQueue<Integer> queue) {
+			this.queue = queue;
+		}
+		@Override
+		public void run() {
+			try {
+				while (true) {
+					Integer item = queue.take();
+					System.out.println("Consumed: " + item);
+					Thread.sleep(1500);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+ProducerConsumerDemo:
+----------------------
+	BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(3);
+		Thread producer = new Thread(new Producer(queue));
+		Thread consumer = new Thread(new Consumer(queue));
+		producer.start();
+		consumer.start();
 
 @SpringBootApplication:
 ==========================
