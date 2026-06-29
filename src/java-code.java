@@ -728,7 +728,50 @@ Api Idempotient:
 			Employee saved = employeeRepo.save(employee);
 			return new EmployeeResponse(saved.getId(), saved.getName(), saved.getRid());
 		}
-		
+SQL:
+====
+	CREATE INDEX idx_create_date ON Transaction (create_date);
+	Row_number:
+		select id,name Row_number() over (partition by dept order by sal desc) as rownum from employee.
+		select * from (select emp_id,name,salary,Row_number() over (order by salary desc) 
+					as RN from employee)
+						where RN=20;
+	Basic Query:
+	------------
+		SELECT dept,avg(sal),as avg_sal
+			FROM emp 
+				where sal>=5000
+					GROUP BY dept
+						HAVING avg(sal)> 6500
+							ORDER BY avg(sal) DESC;
+	Third highest sal
+	-----------------
+		SELECT max(price) from products
+			where price < (select max(price) from products
+							where price < (select max(price) from products)
+						);	
+	Sql Injection:
+	---------------
+		-security vulnerbality where atacker insert sql code into application.
+		ex:password='"+password+"';
+		password:' OR '1'='1
+			query ex:select * from users where username=admin AND password='' OR '1'='1';
+				'1'='1' always true
+		where id='1';		
+				query ex:select * from users where id='1' OR '1'='1'	
+		1' Delete from users --
+			query ex:select * from users where id='1';
+			Delete from users; --	
+		How prevent:
+			-PrepradeStatement best practice
+				db treatthe input as data, not query sql code.
+			ORM Fw
+				Hibernate
+				Spring data jpa
+				Note:use paramemrized queries internally
+				Valid user input.
+				Avoid Sql type quires as much as possible.
+	
 @SpringBootApplication:
 ==========================
 		
