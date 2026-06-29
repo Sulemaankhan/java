@@ -658,14 +658,22 @@ SpringSecurity:
 	@EnableWebSecurity
 	@Configuration
 	public class WebSecurity {
-	    @Bean
-	    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		private static final String[] SWAGGER_PATHS = {
+				"/swagger-ui.html",
+				"/swagger-ui/**",
+				"/v3/api-docs/**",
+				"/swagger-resources/**",
+				"/webjars/**"
+		};
+		@Bean
+		SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 			http.csrf(csrf -> csrf.disable())
 					.authorizeHttpRequests(auth -> auth
 							.requestMatchers("/public").permitAll()
-							.requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+							.requestMatchers(SWAGGER_PATHS).permitAll()
 							.requestMatchers("/user").hasRole("USER")
 							.requestMatchers("/admin").hasRole("ADMIN")
+							.requestMatchers("/api/v1/**").hasAnyRole("USER", "ADMIN")
 							.anyRequest().authenticated())
 					.httpBasic(Customizer.withDefaults());
 			return http.build();
@@ -688,7 +696,6 @@ SpringSecurity:
 		PasswordEncoder passwordEncoder() {
 			return new BCryptPasswordEncoder();
 		}
-
 Api Idempotient:
 ================
 	@RestController
