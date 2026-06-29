@@ -635,6 +635,93 @@ ProducerConsumerDemo:
 		Consumer: Payment service processing orders.
 		Queue: Message queue like Kafka or RabbitMQ.
 
+CustomException:
+==============
+	//Advice Class:
+	--------------
+	@RestControllerAdvice
+	public class GlobalExceptionHandler {
+		@ExceptionHandler(ResourceNotFoundException.class)
+		public ResponseEntity<ApiError> handleResourceNotFound(
+				ResourceNotFoundException ex, HttpServletRequest request) {
+			return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage(), request.getRequestURI());
+		}	
+	//CustomException
+	----------------	
+	public class ResourceNotFoundException extends RuntimeException {
+		public ResourceNotFoundException(String message) {
+			super(message);
+		}
+	}	
+SpringSecurity:
+==============
+	@EnableWebSecurity
+	@Configuration
+	public class WebSecurity {
+	    @Bean
+	    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+			http.csrf(csrf -> csrf.disable())
+					.authorizeHttpRequests(auth -> auth
+							.requestMatchers("/public").permitAll()
+							.requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+							.requestMatchers("/user").hasRole("USER")
+							.requestMatchers("/admin").hasRole("ADMIN")
+							.anyRequest().authenticated())
+					.httpBasic(Customizer.withDefaults());
+			return http.build();
+		}
+		@Bean
+		UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+			UserDetails user = User.builder()
+					.username("user")
+					.password(passwordEncoder.encode("user123"))
+					.roles("USER")
+					.build();
+			UserDetails admin = User.builder()
+					.username("admin")
+					.password(passwordEncoder.encode("admin123"))
+					.roles("ADMIN")
+					.build();
+			return new InMemoryUserDetailsManager(user, admin);
+		}
+		@Bean
+		PasswordEncoder passwordEncoder() {
+			return new BCryptPasswordEncoder();
+		}
+
+Api Idempotient:
+================
+	@RestController
+	public class EmployeeController {
+		private final EmployeeService employeeService;
+		public EmployeeController(EmployeeService employeeService) {
+			this.employeeService = employeeService;
+		}
+		@PostMapping("/api/v1/employees")
+		public ResponseEntity<EmployeeResponse> saveEmployee(@RequestBody EmployeeRequest request,
+				@Parameter(name = "rid", description = "Request ID", required = true, in = ParameterIn.HEADER) @RequestHeader String rid) {
+			return new ResponseEntity<>(employeeService.saveEmployee(request, rid), HttpStatus.CREATED);
+	}
+	
+	@Service
+	public class EmployeeServiceImpl implements EmployeeService {
+		private final EmployeeRepo employeeRepo;
+		public EmployeeServiceImpl(EmployeeRepo employeeRepo) {
+			this.employeeRepo = employeeRepo;
+		}
+		@Override
+		public EmployeeResponse saveEmployee(EmployeeRequest request, String rid) {
+			Optional<Employee> existing = employeeRepo.findByRid(rid);
+			if (existing.isPresent()) {
+				throw new RuntimeException("Already exist...");
+			}
+			Employee employee = new Employee();
+			employee.setName(request.name());
+			employee.setRid(rid);
+			Employee saved = employeeRepo.save(employee);
+			return new EmployeeResponse(saved.getId(), saved.getName(), saved.getRid());
+		}
+		
 @SpringBootApplication:
 ==========================
 		
