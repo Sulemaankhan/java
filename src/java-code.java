@@ -696,6 +696,25 @@ SpringSecurity:
 		PasswordEncoder passwordEncoder() {
 			return new BCryptPasswordEncoder();
 		}
+	Key components
+	==============
+		SecurityConfig -What it defines (4 beans)
+			1. securityFilterChain — core security rules
+				Stateless — no HTTP sessions (STATELESS)
+				CSRF disabled — typical for REST/JWT APIs
+				JWT filter runs before username/password auth
+				401/403 return JSON via custom handlers
+			2. authenticationManager — 
+				used at login to verify username/password
+			3. userDetailsService — in-memory users:
+				user / user123 → ROLE_USER
+				admin / admin123 → ROLE_ADMIN
+			4. passwordEncoder — BCrypt for password hashing
+		JwtService — create/validate tokens
+		JwtAuthenticationFilter — reads Bearer token on each request
+		WebSecurity — rules + stateless config
+		AuthController — login endpoint
+			JSON 401/403 responses via entry point handlers
 Api Idempotient:
 ================
 	@RestController
