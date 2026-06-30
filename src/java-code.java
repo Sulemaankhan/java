@@ -635,6 +635,28 @@ ProducerConsumerDemo:
 		Consumer: Payment service processing orders.
 		Queue: Message queue like Kafka or RabbitMQ.
 
+GetAllEmployee:
+===============
+			Controller
+			----------
+			@GetMapping("api/v1/employees")
+			public ResponseEntity<Page<EmployeeResponseDto>> getAllEmployees(@RequestParam(defaultValue = "1") int page,
+					@RequestParam(defaultValue = "3") int size, @RequestParam(defaultValue = "id") String sort,
+					@RequestParam(defaultValue = "asc") String direction) {
+				Page<EmployeeResponseDto> response = employeeService.getAllEmployees(page, size, sort, direction);
+				return new ResponseEntity<Page<EmployeeResponseDto>>(response, HttpStatus.OK);
+			}
+			ServiceImpl
+			-----------	
+			@Override
+			public Page<EmployeeResponseDto> getAllEmployees(int page, int size, String sort, String direction) {
+				Sort sortGrid=direction.equalsIgnoreCase("desc")
+						? Sort.by(sort).descending()
+						: Sort.by(sort).ascending();		
+				PageRequest pageable=PageRequest.of(page, size, sortGrid);
+				Page<Employee> empPage=employeeRepo.findAll(pageable);
+				return empPage.map(this::convertDto);
+			}
 CustomException:
 ==============
 	//Advice Class:
