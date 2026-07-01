@@ -487,6 +487,42 @@ FlatMap
 			
 			boolean nameNoneMatch=list.stream().noneMatch(name->name.getEname().equalsIgnoreCase("dsjg"));
 			System.out.println("\n Employee none match :\n"+nameNoneMatch);
+
+			Top n result:
+			============
+				//Best approach top 2 numbers
+				-----------------------------
+					List<Integer> list1=List.of(90,4,6,6,84,22,23,56);
+					PriorityQueue<Integer> pq=new PriorityQueue<>();
+					for(Integer num:list1) {
+						pq.offer(num);
+						if(pq.size()>2) {
+							pq.poll();
+						}
+					}
+					List<Integer> listPQ=new ArrayList<>(pq);
+					listPQ.sort(Comparator.reverseOrder());
+
+				//Using stream and limit
+				------------------------
+					List<Employee> top3Sal=list.stream().sorted(Comparator.comparing(Employee::getSalary).reversed())
+					.limit(1).collect(Collectors.toList());
+					System.out.println("=========================\n"+top3Sal);
+
+				Using PriorityQueue
+				------------------	
+					PriorityQueue<Employee> pq=new PriorityQueue<>(
+							Comparator.comparing(Employee::getSalary));
+					for (Employee employee : list) {
+						pq.offer(employee);
+						if(pq.size()>1) {
+							pq.poll();
+						}
+					}
+					List<Employee> result=new ArrayList<>(pq);
+					result.sort(Comparator.comparing(Employee::getSalary).reversed());
+					System.out.println("===Using PR===\n"+result)
+
 Multithreading:
 ===============
 	How many ways to create a thread?
