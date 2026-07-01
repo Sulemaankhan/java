@@ -812,6 +812,133 @@ SQL:
 				Note:use paramemrized queries internally
 				Valid user input.
 				Avoid Sql type quires as much as possible.
+
+React
+=====
+	Props:
+		Props are used to pass data from a parent component to a child component. 
+		To send props into a component, use the same syntax as HTML attributes:
+	
+	Components:
+		Components are independent and reusable bits of code. 
+		Components come in two types, 
+			Class components, 
+			Function components,
+		It is now suggested to use Function components along with Hooks, 
+			which were added in React 16.8. 
+		class Car extends React.Component {
+		  render() {
+			return <h2>Hi, I am a Car!</h2>;
+		  }
+		}
+		function Car() {
+		  return <h2>Hi, I am a Car!</h2>;
+		}
+		Note:
+			-Hooks are only designed for functional components
+			If we try hooks inside the class components ,react throw error.
+		
+	JSX:
+		JSX is JavaScript XML, which allows us to write HTML in React. 	
+	Fregments:
+		Fragments makes the code cleaner and readable.
+	State-
+	-----
+		-muatable data managed by a react components.
+	Life cycle methos:
+	--------------------
+		Mounting: Component is created and inserted into the DOM.
+		Updating: Component re-denders bcoz of data change.
+		Unmounting: Component is removed from the DOM.	
+		
+		DOM:Data Object Model
+			-representation of html page.
+			-As tree Object(content,structure and style) 
+			DOM:
+				-Created by browser
+				-Repesent the actual page
+			Virtual DOM:
+				-Created by react
+				-Light weight copy of DOM
+		
+		Clean up resource function returned by useEffect(()=>{},[])
+	Hooks:
+	------
+		useState
+			The current state.
+			A function that updates the state.
+			Ex:  
+			  const [brand, setBrand] = useState("Ford");
+			  const [model, setModel] = useState("Mustang");
+			  const [year, setYear] = useState("1964");
+			  const [color, setColor] = useState("red");
+			  const[products,setProducts] = useState([]);
+			  const [newProduct, setNewProduct] = useState({})
+			  const [errorRes,setErrorMsg] = useState("")
+		useMemo, 
+		useRef.
+		useContext
+		useReducer
+		useCallBack,
+		useMemo,
+		useCustom
+		useEffect- run every rendar(clean up resource).	
+	Controlled Components
+		In Controlled components, the form's state is managed by the component himself. 
+	Uncontrolled Components
+		Uncontrolled components rely on the DOM to manage the form data. 	
+	Event:
+		React events are written in camelCase syntax:
+			onClick instead of onclick.
+			React event handlers are written inside curly braces:
+			onClick={shoot}  instead of onclick="shoot()".
+	Ex: List of Customer:
+		-----------------
+		import React, { useState, useEffect } from "react";
+		export default function CustomerList() {
+		  // 1. Initialize state to hold your data array
+		  const [customers, setCustomers] = useState([]);
+		  //const [loading, setLoading] = useState(true);
+		  // 2. Fetch or load data when the component mounts
+		  useEffect(() => {
+			// Simulating an API call fetch request
+			const sampleData = [
+			  { id: 101, name: "Alice Johnson", email: "alice@example.com", status: "Active" },
+			  { id: 102, name: "Bob Smith", email: "bob@example.com", status: "Inactive" },
+			  { id: 103, name: "Charlie Brown", email: "charlie@example.com", status: "Active" },
+			];
+			setCustomers(sampleData);
+			//setLoading(false);
+		  }, []); // Empty array ensures this runs exactly once
+		  //if (loading) return <p>Loading customers...</p>;
+		  // 3. Render the list using .map()
+		  return (
+			<div style={{ padding: "20px" }}>
+			  <h2>Customer Registry</h2>
+			  <table border="1" cellPadding="10" style={{ width: "100%", textAlign: "left", borderCollapse: "collapse" }}>
+				<thead>
+				  <tr style={{ backgroundColor: "#f2f2f2" }}>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Status</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  {customers.map((customer) => (
+					<tr key={customer.id}>
+					  <td>{customer.id}</td>
+					  <td>{customer.name}</td>
+					  <td>{customer.email}</td>
+					  <td>{customer.status}</td>
+					</tr>
+				  ))}
+				</tbody>
+			  </table>
+			</div>
+		  );
+		}
+		//export default CustomerList;				
 	
 @SpringBootApplication:
 ==========================
