@@ -671,6 +671,38 @@ ProducerConsumerDemo:
 		Consumer: Payment service processing orders.
 		Queue: Message queue like Kafka or RabbitMQ.
 
+//Freq num based on K
+==================	
+private static void topReqKNum(int[] arr) {	
+		Map<Integer, Integer> map=new HashMap<>();
+		int k=2;
+		for(int num:arr) {
+			map.put(num,map.getOrDefault(num, 1)+1);
+		}		
+		 map.entrySet().stream().sorted((a,b)->a.getValue()-b.getValue())
+		.limit(k)
+		.forEach(s->System.out.println("Freq Nu based on K:"+s.getKey()));
+		//.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));		
+	}	
+//non repeated Longest Sub-String
+-------------------------------
+	private static int longestSubstring(String str) {
+	    if (str == null || str.length() == 0) return 0;
+	    HashMap<Character, Integer> map = new HashMap<>();
+	    int left = 0;
+	    int max = 0;
+	    for (int right = 0; right < str.length(); right++) {
+	        char ch = str.charAt(right);
+	        // If the character is already in the map and within our current window
+	        if (map.containsKey(ch) && map.get(ch) >= left) {
+	            left = map.get(ch) + 1;
+	        }   
+	        max = Math.max(max, right - left + 1);
+	        map.put(ch, right); // Update or insert the character's latest index
+	    } 
+	    return max;
+	}
+
 GetAllEmployee:
 ===============
 			Controller
