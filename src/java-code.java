@@ -670,6 +670,68 @@ ProducerConsumerDemo:
 		Producer: Order service generating orders.
 		Consumer: Payment service processing orders.
 		Queue: Message queue like Kafka or RabbitMQ.
+		
+CompletableFutute:
+=================
+		1:  ExecutorService executor = Executors.newFixedThreadPool(10);
+		2:	CompletableFuture<Customer> customerFuture =
+				CompletableFuture.supplyAsync( //return result
+					() -> customerService.getCustomer(id),executor
+				);
+			CompletableFuture<List<Transaction>> txnFuture =
+				CompletableFuture.supplyAsync( //return result
+					() -> transactionService.getTransactions(id),executor
+				);
+			CompletableFuture<Loan> loanFuture =
+				CompletableFuture.supplyAsync( //return result
+					() -> loanService.getLoan(id),executor
+				);
+		3:	CompletableFuture.allOf( //wait for all task
+				customerFuture,
+				txnFuture,
+				loanFuture
+			).join();
+		4:	DashboardResponse response = new DashboardResponse(
+				customerFuture.join(),
+				txnFuture.join(),
+				loanFuture.join()
+			):
+			Exception:
+			-------------
+			CompletableFuture<Loan> loanFuture =
+			CompletableFuture.supplyAsync(() -> loanService.getLoan(id),executor)
+			.exceptionally(ex -> {
+				System.out.println("Loan service failed");
+			return null;
+
+LRU Cache:
+===========
+	public class SimpleLRUCache<K, V> extends LinkedHashMap<K, V> {
+    private final int capacity;
+    public SimpleLRUCache(int capacity) {
+        // initialCapacity, loadFactor, accessOrder (true tracks access, false tracks insertion)
+        super(capacity, 0.75f, true);
+        this.capacity = capacity;
+    }
+    @Override
+    protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+        // Automatically evicts the oldest entry when size exceeds capacity
+        return size() > capacity;
+    }
+    public static void main(String[] args) {
+        SimpleLRUCache<Integer, String> cache = new SimpleLRUCache<>(3);
+        cache.put(1, "Value A");
+        cache.put(2, "Value B");
+        cache.put(3, "Value C");     
+        System.out.println("Initial Cache: " + cache); // {1=Value A, 2=Value B, 3=Value C}
+        // Accessing key 1 makes it the most recently used
+        cache.get(1); 
+        System.out.println("After accessing 1: " + cache); // {2=Value B, 3=Value C, 1=Value A}
+        // Adding a 4th item triggers eviction of key 2 (least recently used)
+        cache.put(4, "Value D");
+        System.out.println("After adding 4: " + cache); // {3=Value C, 1=Value A, 4=Value D}
+    }
+}
 
 //Freq num based on K
 ==================	
@@ -702,7 +764,6 @@ private static void topReqKNum(int[] arr) {
 	    } 
 	    return max;
 	}
-
 GetAllEmployee:
 ===============
 			Controller
@@ -727,6 +788,14 @@ GetAllEmployee:
 			}
 CustomException:
 ==============
+	ApiError:
+	---------
+		public record ApiError(
+		Instant timestamp,
+		int status,
+		String error,
+		String message,//example = "Employee already exists with rid: req-123
+		String path) //example = "/api/v1/employees"
 	//Advice Class:
 	--------------
 	@RestControllerAdvice
