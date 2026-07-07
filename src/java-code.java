@@ -490,6 +490,57 @@ FlatMap
 			boolean nameNoneMatch=list.stream().noneMatch(name->name.getEname().equalsIgnoreCase("dsjg"));
 			System.out.println("\n Employee none match :\n"+nameNoneMatch);
 
+			List<List<Employee>> list2=List.of(al,al2);
+			List<Employee> flat= list2.stream().flatMap(Collection::stream).collect(Collectors.toList());
+			System.out.println("=====flat :=======\n"+flat);
+			
+			//get each employee per department(distinct) emp list based on the dept 
+			System.out.println("\n======get each employee per department(distinct)======");
+			List<Employee> re=new ArrayList<> (list.stream().collect(Collectors.toMap(Employee::getDepartment, Function.identity(),
+					(e1,e2)->e1
+					))
+					.values() //map.values()
+					);
+			re.forEach(System.out::println);	
+	//partition high and low salary
+			System.out.println("\n====High Sal====");
+			Map<Boolean,List<Employee>> highSal=list.stream().collect(Collectors.partitioningBy(
+					emp->emp.getSalary()>3000
+					));
+			highSal.get(true).forEach(System.out::println);
+			
+			System.out.println("\n=====Low sal====");
+			highSal.get(false).forEach(System.out::println);
+			
+	System.out.println("\n=======find highest paid employee name each department========");
+			Map<String,Optional<Employee>> highestPaid=list.stream().
+				collect(Collectors.groupingBy( //collect 
+						Employee::getDepartment, //distinct department
+					Collectors.maxBy(Comparator.comparing(Employee::getSalary) //each department max sal
+					)
+					));
+			highestPaid.forEach((k,v)->System.out.println(k+"->"+v));
+
+		//find avg department and highest avg dept
+		--------------------------------------------
+			Map<String, Double> highAvgPaidDept=list.stream().collect(Collectors.groupingBy(Employee::getDepartment
+					,Collectors.averagingDouble(Employee::getSalary)));
+			System.out.println("avg each dept \n"
+					+highAvgPaidDept);
+			Map.Entry<String, Double> avg=highAvgPaidDept.entrySet().stream()
+			.max(Map.Entry.comparingByValue())
+			.orElse(null);
+			System.out.println("find highest paid avg department,avg depart\n"
+					+avg.getKey()+" : "+avg.getValue());
+//Partition
+----------
+			List<Integer> numbers=List.of(3, 2, 6, 7, 10,2, 13, 55, 40,77, 81, 10);
+			Map<Boolean, List<Integer>> evenList=numbers.stream().collect(Collectors.partitioningBy(
+					even->even%2==0
+					));
+				System.out.println("Partition by even number: "+evenList.get(true));
+				System.out.println("Partition by odd number: "+evenList.get(false));
+
 			Top n result:
 			============
 				//Best approach top 2 numbers
