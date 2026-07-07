@@ -131,7 +131,6 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 		str = str.replaceAll("[^A-Za-z0-9]", "");
 		for (char c : str.toCharArray()) {
 			map.put(c, map.getOrDefault(c,0)+1); //freq of char
-			
 			//map.getOrDefault(c,0)
 			//if c already in map,take current value
 			//if not take 0
@@ -139,12 +138,16 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 			//map.put(c,value)
 			//put it back map
 		}
+	for(char c:str.toCharArray()) {
+		if(map.get(c)==1) { // k=c, val=1
+				return c;
+		}
+	}
 //Best approch one
 ================
 	//but Brute force
 		//only ASCII charector
 		int[] arr = new int[256];
-
 		// count frequency
 		for (char c:s.toCharArray()) {
 			arr[c]++;
@@ -165,7 +168,6 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 		}
 		throw new RuntimeException("Envalid............");
 	}
-
 //Display consicutive sequence of earch char:
 ==========================================
 		input=input.toLowerCase();
