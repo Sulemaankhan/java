@@ -229,6 +229,12 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 		}
 		return max1 + max2;	
 	}
+	Using java8:
+	-----------
+		int maxSum=Arrays.stream(arr).
+		boxed().sorted((a,b)->b-a)
+		.limit(2).mapToInt(i->i)
+		.sum();
 
 //move zero to right
 ======================
@@ -257,6 +263,16 @@ String str = "1:John:ece;2:Ram:cse;3:Sita:ece";
 			arr[index++]=0;
 		}
 		return arr;
+
+		Using java8
+		-----------	
+		int[] intArr=IntStream.concat(
+			Arrays.stream(arr).filter(i->i!=0), 
+			Arrays.stream(arr).filter(i->i==0))
+				.toArray();
+				//boxed().collect(Collectors.toList())
+			//Stream.concat(stream1,stream1);
+			//Stream.concat(list1,list2);
 findTheDuplicateNum
 ===================	
 private static Set<Integer> findTheDuplicateNum(int[] arr) {
