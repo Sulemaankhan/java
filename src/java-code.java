@@ -997,6 +997,45 @@ SQL:
 			where price < (select max(price) from products
 							where price < (select max(price) from products)
 						);	
+	Highest salary each department:
+	-------------------------------
+			select dept,max(salary) from employee Group by department;
+		
+	Avg salary each department:	
+	------------------------
+			select dept,avg(salary) from employee group by department.
+		
+			select max(salary) from employee where salary
+			<(select max(salary) from employee)	
+
+	Fetch txn from large data set.
+	------------------------------	
+			Create PArtition on table
+				Partition by RANGE(TXN_DATE)
+					(
+					PARTITION p_jan VALUES LESS THAN (DATE '2026-02-01'),
+					PARTITION p_feb VALUES LESS THAN (DATE '2026-03-01'),
+					PARTITION p_march VALUES LESS THAN (DATE '2026-04-01')
+					PARTITION p_max VALUES LESS THAN (MAXVALUE),
+					);
+					Transaction:
+						p_jan
+							-TXN 1
+							-TXN 2
+						p_jan
+							-TXN 1
+							-TXN 2			
+			Create Local index
+				Create Index idx_txn_status ON transactions(txn_status);
+				p_jab
+					-idx_txn_status
+				p_feb
+					-idx_txn_status	
+			Query:
+				-select * from transactions where txn_date 
+					between date '' and ''
+						and txn_status='failed'						 
+
 	Sql Injection:
 	---------------
 		-security vulnerbality where atacker insert sql code into application.
